@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+     <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+     {% block styles %}
+            <!-- Bootstrap CSS -->
+           <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+            <link rel="icon" href="{{ url_for('static', filename = 'img/favicon-32x32.png') }}" type="image/png">
+      <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:300" rel="stylesheet">
+    <style>
+  body {
+    margin: 0;
+  }
+  #title {
+    font-family: 'Roboto Slab', sans-serif;
+  }
+  .mic_btn {
+    border-radius: 50%;
+    background-color: white;
+    border-color: black;
+  }
+  #show_rec_status {
+    color: red;
+    font-family: 'Roboto Slab', serif;
+  }
+  .top_line {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,0.75), rgba(0,0,0,0));
+  }
+  .console {
+    border: none;
+    height: 3px;
+    background-color: #BDBDBD;
+    margin: 0;
+  }
+  div#select_format * {
+    font-family: 'Roboto Slab', serif;
+    display: inline;
+  }
+  .caption {
+    background-color: #4C4C4C;
+    height: 50vh;
+  }
+  div.caption h3 {
+    padding: 10px;
+  }
+  a#save {
+    font-family: 'Roboto Slab', serif;
+    text-decoration: none;
+  }
+  #p_caption {
+    text-align: center;
+    color: #FFFFFF;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  </style>
+    {% endblock %}
+     <title>X-Voice</title>
+    {% endblock %}
+
+</head>
+<body background="{{url_for('static',filename='img/full2.jpg')}}" class="container">
+      {% block content %}
+      <div class="d-flex justify-content-center">
+          <h1 class="text-light" style="padding:50px;font-size:70px">X-Voice Software</h1>
+      </div>
+       <h4 class="text-light d-flex justify-content-center" style="font-size:30px">The purpose of this software is to estimate the age of the user</h4>
+      <p class="text-light d-flex justify-content-center" style="font-size:24px">[Youth: 15 to 24, Adult: 25 to 59, Senior : from 60 years]</p>
+
+      <div class="row">
+          <div class="col">
+               <div id="controls" align="center">
+          <form action="/record" method="post" enctype="multipart/form-data">
+    <div id="microphone">
+      <button
+             id="mic_controller" class="mic_btn" onclick="showRecording()">
+          <img id="recording_state_image" src="{{ url_for('static', filename = 'img/microphone_idle.png') }}" width=128 height=128 id="mic">
+      </button>
+        <p class="text-light d-flex justify-content-center" style="font-size:18px">Click to record</p>
+      </br>
+      <p id="show_rec_status" class="text-light" style="visibility:hidden">Recording...</p>
+    </div>
+    <div id="select_format">
+      <p class="text-light">Select File Format:</p>
+      <input style="padding-right:10px" type="radio" name="file_format" value="PCM"><p class="text-light">PCM</p></input>
+      <input  type="radio" name="file_format" value="WAV" checked><p class="text-light">WAV</p></input>
+    </div>
+                    </form>
+    </br>
+      <form action="/" method="post" enctype="multipart/form-data" class="d-flex justify-content-center">
+
+				{% if prediction %}
+					<p class="text-light d-flex justify-content-center" style="font-size:40px"> {{ prediction }}</p>
+				{% endif %}
+            </form>
+    </br>
+    </br>
+
+  </div>
+
+  </br>
+
+          </div>
+      </div>
+      {% endblock %}
+       {% block scripts %}
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+     <script>
+
+	function showRecording(){
+		var recording = document.getElementById('show_rec_status');
+		var recording_state = document.getElementById('recording_state_image');
+		var mic_controller = document.getElementById('mic_controller');
+		recording_state.src = 'recording_image_path';
+		recording.style.visibility = 'visible';
+		mic_controller.disabled = true;
+
+		setTimeout(()->{
+			recording.style.visibility = 'invisible';
+			recording_state.src = 'idle_image_path';
+			mic_controller.disabled = false;
+		}, 10000)
+	}
+
+</script>
+      {% endblock %}
+</body>
+</html>
