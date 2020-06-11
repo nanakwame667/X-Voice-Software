@@ -23,6 +23,7 @@ record_seconds = 3
 
 @app.route("/", methods=['GET', 'POST'])
 def home():
+
     return render_template("home.html", prediction=None)
 
 
